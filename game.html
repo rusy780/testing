@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+    <h1>heelo</h1>
+</html>
+
+<script>
+    console.log("Hello World");
+
+function getRandomInt(max) {
+    return Math.floor(Math.random() * max);
+}
+
+function getComputerChoice() {
+    const comp = getRandomInt(3);
+    if (comp === 0) return "rock";
+    if (comp === 1) return "paper";
+    return "scissors";
+}
+
+function getHumanChoice() {
+    return prompt("Rock, Paper, or Scissors?");
+}
+
+function playRound(humanChoice, computerChoice) {
+    humanChoice = humanChoice.toLowerCase();
+
+    if (humanChoice === computerChoice) {
+        console.log(`It's a tie! You both chose ${humanChoice}.`);
+        return "tie";
+    } 
+    else if (
+        (humanChoice === "rock" && computerChoice === "scissors") ||
+        (humanChoice === "paper" && computerChoice === "rock") ||
+        (humanChoice === "scissors" && computerChoice === "paper")
+    ) {
+        console.log(`You win! ${humanChoice} beats ${computerChoice}.`);
+        return "human";
+    } 
+    else {
+        console.log(`You lose! ${computerChoice} beats ${humanChoice}.`);
+        return "computer";
+    }
+}
+
+function playGame() {
+    let humanScore = 0;
+    let computerScore = 0;
+
+    for (let i = 1; i <= 5; i++) {
+        console.log(`--- Round ${i} ---`);
+        const humanSelection = getHumanChoice();
+        const computerSelection = getComputerChoice();
+
+        const result = playRound(humanSelection, computerSelection);
+
+        if (result === "human") {
+            humanScore++;
+        } else if (result === "computer") {
+            computerScore++;
+        }
+
+        console.log(`Score after Round ${i}: You ${humanScore} - ${computerScore} Computer`);
+    }
+
+    console.log("=== Final Result ===");
+    if (humanScore > computerScore) {
+        console.log("🎉 You win the game!");
+    } else if (computerScore > humanScore) {
+        console.log("💻 Computer wins the game!");
+    } else {
+        console.log("🤝 It's a tie!");
+    }
+}
+
+// Start the game
+playGame();
+
+
+</script>
