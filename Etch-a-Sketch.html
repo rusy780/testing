@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Etch-a-Sketch</title>
+  <style>
+    body {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      background: #f5f5f5;
+      font-family: Arial, sans-serif;
+      margin: 20px;
+    }
+
+    #container {
+      display: flex;
+      flex-wrap: wrap;
+      width: 960px;
+      height: 960px;
+      border: 2px solid black;
+    }
+
+    .square {
+      box-sizing: border-box;
+      border: 1px solid #ddd;
+    }
+
+    .square:hover {
+      background-color: black;
+    }
+
+    button {
+      margin-bottom: 15px;
+      padding: 8px 16px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <button id="resizeBtn">Resize Grid</button>
+  <div id="container"></div>
+
+  <script>
+    const container = document.getElementById("container");
+    const resizeBtn = document.getElementById("resizeBtn");
+
+    function createGrid(size) {
+      container.innerHTML = ""; // Clear existing grid
+      const squareSize = 960 / size;
+
+      for (let i = 0; i < size * size; i++) {
+        const square = document.createElement("div");
+        square.classList.add("square");
+        square.style.width = `${squareSize}px`;
+        square.style.height = `${squareSize}px`;
+
+        square.addEventListener("mouseover", () => {
+          square.style.backgroundColor = "black";
+        });
+
+        container.appendChild(square);
+      }
+    }
+
+    createGrid(16); // Default 16x16 grid
+
+    resizeBtn.addEventListener("click", () => {
+      let newSize = prompt("Enter grid size (max 100):");
+      newSize = parseInt(newSize);
+
+      if (isNaN(newSize) || newSize < 1 || newSize > 100) {
+        alert("Invalid size! Please enter a number between 1 and 100.");
+        return;
+      }
+
+      createGrid(newSize);
+    });
+  </script>
+</body>
+</html>
