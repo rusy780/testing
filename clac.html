@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Calculator</title>
+  <style>
+    body {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      background: #f3f3f3;
+      font-family: Arial, sans-serif;
+    }
+    .calculator {
+      background: white;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0px 4px 10px rgba(0,0,0,0.2);
+    }
+    .display {
+      width: 240px;
+      height: 50px;
+      background: #222;
+      color: white;
+      font-size: 2rem;
+      text-align: right;
+      padding: 10px;
+      margin-bottom: 10px;
+      border-radius: 5px;
+      overflow: hidden;
+    }
+    .buttons {
+      display: grid;
+      grid-template-columns: repeat(4, 60px);
+      grid-gap: 10px;
+    }
+    button {
+      padding: 20px;
+      font-size: 1.2rem;
+      cursor: pointer;
+      border: none;
+      border-radius: 5px;
+      background: #ddd;
+    }
+    button.operator { background: orange; }
+    button.equals { background: green; color: white; }
+    button.clear { background: red; color: white; }
+  </style>
+</head>
+<body>
+  <div class="calculator">
+    <div class="display" id="display">0</div>
+    <div class="buttons">
+      <button class="clear">C</button>
+      <button class="operator">/</button>
+      <button class="operator">*</button>
+      <button class="operator">-</button>
+      
+      <button>7</button><button>8</button><button>9</button><button class="operator">+</button>
+      <button>4</button><button>5</button><button>6</button><button class="equals">=</button>
+      <button>1</button><button>2</button><button>3</button><button>0</button>
+    </div>
+  </div>
+
+  <script>
+    // Basic math functions
+    function add(a,b){ return a+b; }
+    function subtract(a,b){ return a-b; }
+    function multiply(a,b){ return a*b; }
+    function divide(a,b){ return b===0 ? "ERR" : a/b; }
+
+    function operate(op,a,b){
+      a = Number(a); b = Number(b);
+      if(op==='+') return add(a,b);
+      if(op==='-') return subtract(a,b);
+      if(op==='*') return multiply(a,b);
+      if(op==='/') return divide(a,b);
+    }
+
+    const display = document.getElementById("display");
+    let firstNum = "";
+    let secondNum = "";
+    let operator = null;
+    let resultDisplayed = false;
+
+    function updateDisplay(content){
+      display.textContent = content;
+    }
+
+    document.querySelectorAll("button").forEach(btn=>{
+      btn.addEventListener("click", ()=>{
+        const val = btn.textContent;
+
+        if(btn.classList.contains("clear")){
+          firstNum = "";
+          secondNum = "";
+          operator = null;
+          updateDisplay("0");
+          return;
+        }
+
+        if(btn.classList.contains("operator")){
+          if(firstNum && secondNum && operator){
+            const res = operate(operator, firstNum, secondNum);
+            if(res === "ERR"){ updateDisplay("Can't divide by 0"); return; }
+            firstNum = Math.round(res*1000)/1000;
+            updateDisplay(firstNum);
+            secondNum = "";
+          }
+          operator = val;
+          resultDisplayed = false;
+          return;
+        }
+
+        if(btn.classList.contains("equals")){
+          if(firstNum && secondNum && operator){
+            const res = operate(operator, firstNum, secondNum);
+            if(res === "ERR"){ updateDisplay("Can't divide by 0"); return; }
+            firstNum = Math.round(res*1000)/1000;
+            updateDisplay(firstNum);
+            secondNum = "";
+            operator = null;
+            resultDisplayed = true;
+          }
+          return;
+        }
+
+        // Digits
+        if(resultDisplayed){
+          firstNum = "";
+          resultDisplayed = false;
+        }
+
+        if(!operator){
+          firstNum += val;
+          updateDisplay(firstNum);
+        } else {
+          secondNum += val;
+          updateDisplay(secondNum);
+        }
+      });
+    });
+  </script>
+</body>
+</html>
